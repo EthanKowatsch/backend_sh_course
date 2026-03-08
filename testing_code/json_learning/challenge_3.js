@@ -15,7 +15,7 @@ console.log(`JSON String: ${orderJSON}`);
 const parsedJSONOrder = JSON.parse(orderJSON);
 
 // Complete the order status
-parsedJSONOrder.status = "Complete";
+parsedJSONOrder.status = "completed";
 
 // Print the order status
 console.log(`Order Status: ${parsedJSONOrder.status}`);
