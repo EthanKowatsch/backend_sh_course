@@ -1,5 +1,8 @@
 import { mainMenu } from "./menu.js";
-import { addTask, deleteTask, updateTask, listTasks, listTasksNotDone, listTasksInProgress, listTasksDone } from "./taskManager.js";
-import { loadTasks, saveTasks } from "./storage.js";
+import { loadTasks } from "./storage.js";
+
+
+// TODO: There is an issue loading this
+loadTasks();
 
 mainMenu();
