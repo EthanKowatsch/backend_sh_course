@@ -10,44 +10,17 @@ const currentDate = new Date();
  *
  */
 export function addTask(name, description) {
-    currentTaskID += 1;
-
-    const newTask = {
+    let newTask = {
         taskName: name,
-        taskID: currentTaskID,
+        taskID: currentTaskID + 1,
         taskDescription: description,
         taskStatus: "Not Started",
         dateCreated: currentDate.toDateString()
     };
 
     tasksArray.push(newTask);
-}
 
-/**
- * Function to remove an a task
- * 
- * @param {number} idToDelete - ID of task to delete.
- * @returns A new array without the task that was to be removed.
- */
-export function deleteTask(idToDelete) {
-    let tempTaskArray = [];
-    
-    for(let i = 0; i < tasksArray.length; i++) {
-        if(idToDelete === tasksArray[i].taskID) {
-            continue;
-        }
-        else {
-            tempTaskArray.push(tasksArray[i]);
-        }
-    }
-
-    currentTaskID = tempTaskArray.length;
-
-    for(let i = 0; i < tempTaskArray.length; i++) {
-        tempTaskArray[i].taskID = i + 1;
-    }
-
-    return tempTaskArray;
+    currentTaskID += 1;
 }
 
 /**
@@ -82,9 +55,41 @@ export function updateTask(searchID, updateType, updateValue) {
 }
 
 /**
+ * Function to remove an a task
+ * 
+ * @param {number} idToDelete - ID of task to delete.
+ * @returns A new array without the task that was to be removed.
+ */
+export function deleteTask(idToDelete) {
+    let tempTaskArray = [];
+    
+    for(let i = 0; i < tasksArray.length; i++) {
+        if(idToDelete === tasksArray[i].taskID) {
+            continue;
+        }
+        else {
+            tempTaskArray.push(tasksArray[i]);
+        }
+    }
+
+    currentTaskID = tempTaskArray.length;
+
+    for(let i = 0; i < tempTaskArray.length; i++) {
+        tempTaskArray[i].taskID = i + 1;
+    }
+
+    return tempTaskArray;
+}
+
+/**
  * Function to list all tasks in a readable way.
  */
 export function listTasks() {
+    if(tasksArray.length === 0) {
+        console.log("No tasks to display. Add a task.");
+        return;
+    }
+
     for(let i = 0; i < tasksArray.length; i++) {
         console.log(`-------------------\nTask ID: ${tasksArray[i].taskID}, Task Name: ${tasksArray[i].taskName}\nTask Description: ${tasksArray[i].taskDescription}\nTask Status: ${tasksArray[i].taskStatus}\nDate Created: ${tasksArray[i].dateCreated} -------------------\n`);
     }
@@ -94,6 +99,11 @@ export function listTasks() {
  * Function to display tasks to be started.
  */
 export function listTasksTodo() {
+    if(tasksArray.length === 0) {
+        console.log("No tasks to display. Add a task.");
+        return;
+    }
+
     for(let i = 0; i < tasksArray.length; i++) {
         if(tasksArray[i].taskStatus === "Todo") {
             console.log(`-------------------\nTask ID: ${tasksArray[i].taskID}, Task Name: ${tasksArray[i].taskName}\nTask Description: ${tasksArray[i].taskDescription}\nTask Status: ${tasksArray[i].taskStatus}\nDate Created: ${tasksArray[i].dateCreated} -------------------\n`);
@@ -105,6 +115,11 @@ export function listTasksTodo() {
  * Function to display tasks in progress
  */
 export function listTasksInProgress() {
+    if(tasksArray.length === 0) {
+        console.log("No tasks to display. Add a task.");
+        return;
+    }
+
     for(let i = 0; i < tasksArray.length; i++) {
         if(tasksArray[i].taskStatus === "In Progress") {
             console.log(`-------------------\nTask ID: ${tasksArray[i].taskID}, Task Name: ${tasksArray[i].taskName}\nTask Description: ${tasksArray[i].taskDescription}\nTask Status: ${tasksArray[i].taskStatus}\nDate Created: ${tasksArray[i].dateCreated} -------------------\n`);
@@ -116,6 +131,11 @@ export function listTasksInProgress() {
  * Function to display tasks that are done.
  */
 export function listTasksDone() {
+    if(tasksArray.length === 0) {
+        console.log("No tasks to display. Add a task.");
+        return;
+    }
+
     for(let i = 0; i < tasksArray.length; i++) {
         if(tasksArray[i].taskStatus === "Done") {
             console.log(`-------------------\nTask ID: ${tasksArray[i].taskID}, Task Name: ${tasksArray[i].taskName}\nTask Description: ${tasksArray[i].taskDescription}\nTask Status: ${tasksArray[i].taskStatus}\nDate Created: ${tasksArray[i].dateCreated} -------------------\n`);
