@@ -8,8 +8,6 @@ const currentDate = new Date();
  * @param {string} name - The name/title of the task.
  * @param {string} description - A short description of the task.
  *
- * @example
- * addTask("Buy groceries", "Milk, eggs, and bread");
  */
 export function addTask(name, description) {
     currentTaskID += 1;
