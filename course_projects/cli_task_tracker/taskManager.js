@@ -23,9 +23,31 @@ export function addTask(name, description) {
     tasksArray.push(newTask);
 }
 
-
+/**
+ * Function to remove an a task
+ * 
+ * @param {number} idToDelete - ID of task to delete.
+ * @returns A new array without the task that was to be removed.
+ */
 export function deleteTask(idToDelete) {
+    let tempTaskArray = [];
     
+    for(let i = 0; i < tasksArray.length; i++) {
+        if(idToDelete === tasksArray[i].taskID) {
+            continue;
+        }
+        else {
+            tempTaskArray.push(tasksArray[i]);
+        }
+    }
+
+    currentTaskID = tempTaskArray.length;
+
+    for(let i = 0; i < tempTaskArray.length; i++) {
+        tempTaskArray[i].taskID = i + 1;
+    }
+
+    return tempTaskArray;
 }
 
 /**
