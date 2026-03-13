@@ -1,4 +1,4 @@
-import { addTask, deleteTask, updateTask, listTasks, listTasksNotDone, listTasksInProgress, listTasksDone } from "./taskManager.js";
+import { addTask, deleteTask, updateTask, listTasks, listTasksTodo, listTasksInProgress, listTasksDone } from "./taskManager.js";
 import { tasksArray, saveTasks } from "./storage.js";
 import readline from "node:readline";
 
@@ -34,7 +34,7 @@ export function mainMenu() {
         switch(userChoice) {
             case "1":
 
-            // TODO: FIX THIS ISSUE
+                // TODO: FIX THIS ISSUE
                 questionLine.question("Enter Task Name:", (newTaskName) => {
                     if(newTaskName === "") {
                         console.log("Task name incorrect");
@@ -55,7 +55,19 @@ export function mainMenu() {
                 mainMenu();
                 break;
             case "2":
-                
+
+                // TODO: Figure out this code
+                if(currentTaskID == 0) {
+                    console.log(`No tasks exist yet.`);
+                }
+
+                if(searchID > currentTaskID) {
+                    console.log(`ID: #${searchID} does not exist.`);
+                }
+
+                if(searchID < 0) {
+                    console.log(`ID: #${searchID} must be a positive number.`);
+                }
             
                 mainMenu();
                 break;

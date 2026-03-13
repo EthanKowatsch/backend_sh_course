@@ -1,12 +1,10 @@
 export let tasksArray = [];
-export let currentTaskID;
+export let currentTaskID = 0;
 
 import fs from "fs";
 
 /**
- * 
  * Loads the existing tasks into the task array
- * 
  */
 export function loadTasks() {
     let tempObj;
