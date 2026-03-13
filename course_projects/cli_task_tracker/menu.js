@@ -1,5 +1,5 @@
 import { addTask, deleteTask, updateTask, listTasks, listTasksTodo, listTasksInProgress, listTasksDone } from "./taskManager.js";
-import { tasksArray, saveTasks, currentTaskID } from "./storage.js";
+import { saveTasks, currentTaskID } from "./storage.js";
 import readline from "node:readline";
 
 const rl = readline.createInterface({
@@ -27,7 +27,7 @@ export function mainMenu() {
             // Add Task
             case "1":
                 rl.question("Enter task name: ", (taskName) => {
-                    if (!taskName) {
+                    if (!taskName.trim()) {
                         console.log("Task name must not be empty.");
                         mainMenu();
                         return;
@@ -53,46 +53,51 @@ export function mainMenu() {
             // Update Task
             case "2":
                 rl.question("Enter ID to Update: ", (idToUpdate) => {
-                    if(!idToDelete) {
-                        console.log("ID must be a value.");
-                        return;
-                    }
-
-                    if(idToDelete > currentTaskID) {
-                        console.log("ID must be a valid ID.");
+                    if(!idToUpdate || isNaN(idToUpdate) || idToUpdate < 1 || idToUpdate > currentTaskID) {
+                        console.log("Invalid ID");
+                        mainMenu();
                         return;
                     }
 
                     rl.question("Enter Option to Update (1. Update Name, 2. Update Description, 3. Update Status): ", (updateChoice) => {
 
+                        if(!idToUpdate || isNaN(idToUpdate) || idToUpdate < 1 || idToUpdate > currentTaskID) {
+                            console.log("Invalid ID");
+                            mainMenu();
+                            return;
+                        }
+
                         switch(updateChoice) {
-                            // Update Name
-                            case 1:
+                            case "1":
                                 rl.question("Enter New Name: ", (updatedName) => {
-                                    updateTask(idToUpdate, updateChoice, updatedName);
+                                    updateTask(Number(idToUpdate), 1, updatedName);
                                     console.log(`Name Updated To: ${updatedName}`);
+                                    mainMenu();
                                 });
                                 break;
-                            // Update Description
-                            case 2:
+                            case "2":
                                 rl.question("Enter New Description: ", (updatedDescription) => {
-                                    updateTask(idToUpdate, updateChoice, updatedDescription);
+                                    updateTask(Number(idToUpdate), 2, updatedDescription);
                                     console.log(`Description Updated.`);
+                                    mainMenu();
                                 });
                                 break;
-                            // Update Status
-                            case 3:
+                            case "3":
                                 rl.question("Enter New Status (Todo, In Progress, Done): ", (updatedStatus) => {
-                                    updateTask(idToUpdate, updateChoice, updatedStatus);
+                                    updateTask(Number(idToUpdate), 3, updatedStatus);
                                     console.log(`Status Updated To: ${updatedStatus}`);
+                                    mainMenu();
                                 });
                                 break;
                             default:
                                 console.log("Update option must be between 1 and 3.");
+                                mainMenu();
                                 break;
                         }
                     });
                 });
+
+                mainMenu();
                 break;
 
             // Delete a Task
@@ -108,7 +113,7 @@ export function mainMenu() {
                         return;
                     }
 
-                    deleteTask(idToDelete);
+                    deleteTask(Number(idToDelete));
 
                     mainMenu();
                 });

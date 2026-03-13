@@ -1,8 +1,8 @@
 import { mainMenu } from "./menu.js";
-import { loadTasks } from "./storage.js";
+import { currentTaskID, loadTasks } from "./storage.js";
 
-
-// TODO: There is an issue loading this
-loadTasks();
+if(currentTaskID != 0) {
+    loadTasks();
+}
 
 mainMenu();

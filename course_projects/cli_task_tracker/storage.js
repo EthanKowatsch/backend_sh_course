@@ -9,20 +9,25 @@ import fs from "fs";
 export function loadTasks() {
     let tempObj;
 
-    fs.readFile("task.JSON", "utf8", (err, jsonData) => {
-        if(err) {
-            console.error("Error reading JSON file.", err);
+    try {
+        const jsonData = fs.readFileSync("task.JSON", "utf8");
+
+        if (!jsonData) {
+            console.log("No tasks yet — starting with empty task list.");
             return;
         }
 
         tempObj = JSON.parse(jsonData);
 
-        for(let i = 0; i < tempObj.length; i++) {
+        for (let i = 0; i < tempObj.length; i++) {
             tasksArray.push(tempObj[i]);
         }
 
         currentTaskID = tempObj.length;
-    });
+
+    } catch (err) {
+        console.error("Error reading JSON file.", err);
+    }
 }
 
 /**
