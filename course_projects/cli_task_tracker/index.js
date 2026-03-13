@@ -1,5 +1,5 @@
 import { mainMenu } from "./menu.js";
-import { storage, loadTasks } from "./storage.js";
+import { loadTasks } from "./storage.js";
 
 loadTasks();
 
