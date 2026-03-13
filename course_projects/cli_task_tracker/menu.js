@@ -1,5 +1,5 @@
 import { addTask, deleteTask, updateTask, listTasks, listTasksTodo, listTasksInProgress, listTasksDone } from "./taskManager.js";
-import { saveTasks, currentTaskID } from "./storage.js";
+import { tasksArray, saveTasks, currentTaskID } from "./storage.js";
 import readline from "node:readline";
 
 const rl = readline.createInterface({
@@ -113,7 +113,7 @@ export function mainMenu() {
                         return;
                     }
 
-                    deleteTask(Number(idToDelete));
+                    tasksArray = deleteTask(Number(idToDelete));
 
                     mainMenu();
                 });
