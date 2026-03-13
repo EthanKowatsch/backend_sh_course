@@ -30,72 +30,63 @@ export function addTask(name, description) {
  * @param {string} updateValue
  */
 export function updateTask(searchID, updateType, updateValue) {
-    if(currentTaskID < 1) {
-        console.log("No tasks to update.");
-        return;
-    }
-
     for (let i = 0; i < storage.tasksArray.length; i++) {
-
         if (storage.tasksArray[i].taskID === searchID) {
-
+            // Update name
             if (updateType === 1) {
                 storage.tasksArray[i].taskName = updateValue;
             }
-
+            // Update description
             else if (updateType === 2) {
                 storage.tasksArray[i].taskDescription = updateValue;
             }
+            // Update status (normalize input)
+            else if (updateType === 3) {
+                const validStatuses = ["Todo", "In Progress", "Done"];
+                const formattedStatus = updateValue.charAt(0).toUpperCase() + updateValue.slice(1).toLowerCase();
 
-            else if (
-                updateType === 3 &&
-                (updateValue === "Todo" ||
-                 updateValue === "In Progress" ||
-                 updateValue === "Done")
-            ) {
-                storage.tasksArray[i].taskStatus = updateValue;
-            }
-
-            else {
+                if (validStatuses.includes(formattedStatus)) {
+                    storage.tasksArray[i].taskStatus = formattedStatus;
+                } else {
+                    console.log("Invalid status. Must be: Todo, In Progress, or Done.");
+                }
+            } else {
                 console.log("Task could not be updated.");
             }
 
-            return;
+            break;
         }
     }
-
-    console.log("Task not found.");
 }
 
 /**
- * Deletes a task by ID
+ * Function to remove a task
+ * 
+ * @param {number} idToDelete - ID of task to delete.
+ * @returns A new array without the task that was removed.
  */
 export function deleteTask(idToDelete) {
-    if(currentTaskID < 1) {
-        console.log("No tasks to update.");
-        return;
-    }    
+    let tempTaskArray = [];
 
-    const index = storage.tasksArray.findIndex(
-        task => task.taskID === idToDelete
-    );
-
-    if (index === -1) {
-        console.log("Task not found.");
-        return;
+    for (let i = 0; i < storage.tasksArray.length; i++) {
+        if (idToDelete === storage.tasksArray[i].taskID) {
+            continue; // skip the task to delete
+        } else {
+            tempTaskArray.push(storage.tasksArray[i]);
+        }
     }
 
-    storage.tasksArray.splice(index, 1);
+    // Update the storage array
+    storage.tasksArray = tempTaskArray;
 
-    // Reassign IDs so they stay sequential
+    // Reset task IDs sequentially
     for (let i = 0; i < storage.tasksArray.length; i++) {
         storage.tasksArray[i].taskID = i + 1;
     }
 
+    // Update currentTaskID
     storage.currentTaskID = storage.tasksArray.length;
 }
-
-// TODO: Fix tasks so that they display no tasks when there are none in a certain status
 
 /**
  * List all tasks
