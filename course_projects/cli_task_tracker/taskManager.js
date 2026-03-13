@@ -95,6 +95,8 @@ export function deleteTask(idToDelete) {
     storage.currentTaskID = storage.tasksArray.length;
 }
 
+// TODO: Fix tasks so that they display no tasks when there are none in a certain status
+
 /**
  * List all tasks
  */
@@ -106,7 +108,6 @@ export function listTasks() {
     }
 
     for (let task of storage.tasksArray) {
-
         console.log(
 `--------------------------------------
 Task ID: ${task.taskID}
@@ -123,16 +124,16 @@ Date Created: ${task.dateCreated}
  * List Todo tasks
  */
 export function listTasksTodo() {
-
     if (storage.tasksArray.length === 0) {
         console.log("No tasks to display. Add a task.");
         return;
     }
 
+    let tasksExist = false;
+
     for (let task of storage.tasksArray) {
-
         if (task.taskStatus === "Todo") {
-
+            tasksExist = true;
             console.log(
 `--------------------------------------
 Task ID: ${task.taskID}
@@ -143,6 +144,10 @@ Date Created: ${task.dateCreated}
 --------------------------------------`
             );
         }
+    }
+
+    if (!tasksExist) {
+        console.log("No tasks exist in this status.");
     }
 }
 
@@ -156,10 +161,12 @@ export function listTasksInProgress() {
         return;
     }
 
+    let tasksExist = false;
+
     for (let task of storage.tasksArray) {
 
         if (task.taskStatus === "In Progress") {
-
+tasksExist = true;
             console.log(
 `--------------------------------------
 Task ID: ${task.taskID}
@@ -170,6 +177,10 @@ Date Created: ${task.dateCreated}
 --------------------------------------`
             );
         }
+    }
+
+    if (!tasksExist) {
+        console.log("No tasks exist in this status.");
     }
 }
 
@@ -183,10 +194,12 @@ export function listTasksDone() {
         return;
     }
 
+    let tasksExist = false;
+
     for (let task of storage.tasksArray) {
 
         if (task.taskStatus === "Done") {
-
+            tasksExist = true;
             console.log(
 `--------------------------------------
 Task ID: ${task.taskID}
@@ -197,5 +210,9 @@ Date Created: ${task.dateCreated}
 --------------------------------------`
             );
         }
+    }
+
+    if (!tasksExist) {
+        console.log("No tasks exist in this status.");
     }
 }
