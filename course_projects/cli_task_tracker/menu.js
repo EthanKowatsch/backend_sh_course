@@ -1,5 +1,5 @@
 import { addTask, deleteTask, updateTask, listTasks, listTasksTodo, listTasksInProgress, listTasksDone } from "./taskManager.js";
-import { tasksArray, saveTasks, currentTaskID } from "./storage.js";
+import { storage, saveTasks } from "./storage.js";
 import readline from "node:readline";
 
 const rl = readline.createInterface({
@@ -24,6 +24,7 @@ export function mainMenu() {
 
     rl.question("Enter choice: ", (userChoice) => {
         switch(userChoice) {
+
             // Add Task
             case "1":
                 rl.question("Enter task name: ", (taskName) => {
@@ -34,26 +35,24 @@ export function mainMenu() {
                     }
 
                     rl.question("Enter task description: ", (taskDescription) => {
-                        if(!taskDescription) {
+                        if (!taskDescription.trim()) {
                             console.log("Task description must not be empty.");
                             mainMenu();
                             return;
                         }
-                        
+
                         addTask(taskName, taskDescription);
-
-                        console.log(`Task "${taskName}" added successfully!`);
-
+                        console.log(`Task "${taskName}" added successfully.`);
                         mainMenu();
                     });
-
                 });
                 break;
 
             // Update Task
             case "2":
                 rl.question("Enter ID to Update: ", (idToUpdate) => {
-                    if(!idToUpdate || isNaN(idToUpdate) || idToUpdate < 1 || idToUpdate > currentTaskID) {
+
+                    if (!idToUpdate || isNaN(idToUpdate) || idToUpdate < 1 || idToUpdate > storage.currentTaskID) {
                         console.log("Invalid ID");
                         mainMenu();
                         return;
@@ -61,13 +60,8 @@ export function mainMenu() {
 
                     rl.question("Enter Option to Update (1. Update Name, 2. Update Description, 3. Update Status): ", (updateChoice) => {
 
-                        if(!idToUpdate || isNaN(idToUpdate) || idToUpdate < 1 || idToUpdate > currentTaskID) {
-                            console.log("Invalid ID");
-                            mainMenu();
-                            return;
-                        }
-
                         switch(updateChoice) {
+
                             case "1":
                                 rl.question("Enter New Name: ", (updatedName) => {
                                     updateTask(Number(idToUpdate), 1, updatedName);
@@ -75,6 +69,7 @@ export function mainMenu() {
                                     mainMenu();
                                 });
                                 break;
+
                             case "2":
                                 rl.question("Enter New Description: ", (updatedDescription) => {
                                     updateTask(Number(idToUpdate), 2, updatedDescription);
@@ -82,6 +77,7 @@ export function mainMenu() {
                                     mainMenu();
                                 });
                                 break;
+
                             case "3":
                                 rl.question("Enter New Status (Todo, In Progress, Done): ", (updatedStatus) => {
                                     updateTask(Number(idToUpdate), 3, updatedStatus);
@@ -89,6 +85,7 @@ export function mainMenu() {
                                     mainMenu();
                                 });
                                 break;
+
                             default:
                                 console.log("Update option must be between 1 and 3.");
                                 mainMenu();
@@ -96,25 +93,26 @@ export function mainMenu() {
                         }
                     });
                 });
-
-                mainMenu();
                 break;
 
-            // Delete a Task
+            // Delete Task
             case "3":
                 rl.question("Enter Task ID to Delete: ", (idToDelete) => {
-                    if(!idToDelete) {
+
+                    if (!idToDelete) {
                         console.log("ID must be a value.");
+                        mainMenu();
                         return;
                     }
 
-                    if(idToDelete > currentTaskID) {
+                    if (isNaN(idToDelete) || idToDelete < 1 || idToDelete > storage.currentTaskID) {
                         console.log("ID must be a valid ID.");
+                        mainMenu();
                         return;
                     }
 
-                    tasksArray = deleteTask(Number(idToDelete));
-
+                    deleteTask(Number(idToDelete));
+                    console.log(`Task ${idToDelete} deleted.`);
                     mainMenu();
                 });
                 break;
@@ -125,37 +123,31 @@ export function mainMenu() {
                 mainMenu();
                 break;
 
-            // List Tasks To Do
+            // List Tasks Todo
             case "5":
                 listTasksTodo();
-
                 mainMenu();
                 break;
 
             // List Tasks In Progress
             case "6":
                 listTasksInProgress();
-
                 mainMenu();
                 break;
 
             // List Tasks Done
             case "7":
                 listTasksDone();
-
                 mainMenu();
                 break;
 
-            // Exit program
+            // Exit
             case "8":
-                // Save tasks and exit
                 saveTasks();
-
                 console.log("\nExited the task tracker. Saved tasks.");
                 rl.close();
                 break;
 
-            // Invalid input
             default:
                 console.log("Invalid choice. Please try again.");
                 mainMenu();

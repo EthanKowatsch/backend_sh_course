@@ -1,7 +1,9 @@
-export let tasksArray = [];
-export let currentTaskID = 0;
-
 import fs from "fs";
+
+export const storage = {
+    tasksArray: [],
+    currentTaskID: 0
+};
 
 /**
  * Loads the existing tasks into the task array

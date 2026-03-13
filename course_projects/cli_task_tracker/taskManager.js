@@ -1,144 +1,193 @@
-import { tasksArray, currentTaskID } from "./storage.js";
-
-const currentDate = new Date();
+import { storage } from "./storage.js";
 
 /**
  * Adds a new task to the tasksArray.
  *
  * @param {string} name - The name/title of the task.
  * @param {string} description - A short description of the task.
- *
  */
 export function addTask(name, description) {
-    let newTask = {
+
+    const currentDate = new Date();
+
+    const newTask = {
         taskName: name,
-        taskID: currentTaskID + 1,
+        taskID: storage.currentTaskID + 1,
         taskDescription: description,
-        taskStatus: "Not Started",
+        taskStatus: "Todo",
         dateCreated: currentDate.toDateString()
     };
 
-    tasksArray.push(newTask);
-
-    currentTaskID += 1;
+    storage.tasksArray.push(newTask);
+    storage.currentTaskID += 1;
 }
 
 /**
  * Function to update a given task by its ID.
  * 
- * @param {number} searchID - ID of task to update.
- * @param {number} updateType - Indicates which value should be updated (1. Update Name, 2. Update Description, 3. Update Status).
- * @param {string} updateValue - Holds the value to put in the updated corresponding value.
+ * @param {number} searchID
+ * @param {number} updateType
+ * @param {string} updateValue
  */
 export function updateTask(searchID, updateType, updateValue) {
-    for(let i = 0; i < tasksArray.length; i++) {
-        if(tasksArray[i].taskID === searchID) {
-            // Update name
-            if(updateType === 1) {
-                tasksArray[i].taskName = updateValue;
+
+    for (let i = 0; i < storage.tasksArray.length; i++) {
+
+        if (storage.tasksArray[i].taskID === searchID) {
+
+            if (updateType === 1) {
+                storage.tasksArray[i].taskName = updateValue;
             }
-            // Update description
-            else if(updateType === 2) {
-                tasksArray[i].taskDescription = updateValue;
+
+            else if (updateType === 2) {
+                storage.tasksArray[i].taskDescription = updateValue;
             }
-            // Update status
-            else if((updateType === 3) && (updateValue === "Todo" || updateValue === "In Progress" || updateValue === "Done")) {
-                tasksArray[i].taskStatus = updateValue;
+
+            else if (
+                updateType === 3 &&
+                (updateValue === "Todo" ||
+                 updateValue === "In Progress" ||
+                 updateValue === "Done")
+            ) {
+                storage.tasksArray[i].taskStatus = updateValue;
             }
-            else{
+
+            else {
                 console.log("Task could not be updated.");
             }
 
-            break;
+            return;
         }
     }
+
+    console.log("Task not found.");
 }
 
 /**
- * Function to remove an a task
- * 
- * @param {number} idToDelete - ID of task to delete.
- * @returns A new array without the task that was to be removed.
+ * Deletes a task by ID
  */
 export function deleteTask(idToDelete) {
-    let tempTaskArray = [];
-    
-    for(let i = 0; i < tasksArray.length; i++) {
-        if(idToDelete === tasksArray[i].taskID) {
-            continue;
-        }
-        else {
-            tempTaskArray.push(tasksArray[i]);
-        }
+
+    const index = storage.tasksArray.findIndex(
+        task => task.taskID === idToDelete
+    );
+
+    if (index === -1) {
+        console.log("Task not found.");
+        return;
     }
 
-    currentTaskID = tempTaskArray.length;
+    storage.tasksArray.splice(index, 1);
 
-    for(let i = 0; i < tempTaskArray.length; i++) {
-        tempTaskArray[i].taskID = i + 1;
+    // Reassign IDs so they stay sequential
+    for (let i = 0; i < storage.tasksArray.length; i++) {
+        storage.tasksArray[i].taskID = i + 1;
     }
 
-    return tempTaskArray;
+    storage.currentTaskID = storage.tasksArray.length;
 }
 
 /**
- * Function to list all tasks in a readable way.
+ * List all tasks
  */
 export function listTasks() {
-    if(tasksArray.length === 0) {
+
+    if (storage.tasksArray.length === 0) {
         console.log("No tasks to display. Add a task.");
         return;
     }
 
-    for(let i = 0; i < tasksArray.length; i++) {
-        console.log(`-------------------\nTask ID: ${tasksArray[i].taskID}, Task Name: ${tasksArray[i].taskName}\nTask Description: ${tasksArray[i].taskDescription}\nTask Status: ${tasksArray[i].taskStatus}\nDate Created: ${tasksArray[i].dateCreated} -------------------\n`);
+    for (let task of storage.tasksArray) {
+
+        console.log(
+`--------------------------------------
+Task ID: ${task.taskID}
+Task Name: ${task.taskName}
+Task Description: ${task.taskDescription}
+Task Status: ${task.taskStatus}
+Date Created: ${task.dateCreated}
+--------------------------------------`
+        );
     }
 }
 
 /**
- * Function to display tasks to be started.
+ * List Todo tasks
  */
 export function listTasksTodo() {
-    if(tasksArray.length === 0) {
+
+    if (storage.tasksArray.length === 0) {
         console.log("No tasks to display. Add a task.");
         return;
     }
 
-    for(let i = 0; i < tasksArray.length; i++) {
-        if(tasksArray[i].taskStatus === "Todo") {
-            console.log(`-------------------\nTask ID: ${tasksArray[i].taskID}, Task Name: ${tasksArray[i].taskName}\nTask Description: ${tasksArray[i].taskDescription}\nTask Status: ${tasksArray[i].taskStatus}\nDate Created: ${tasksArray[i].dateCreated} -------------------\n`);
+    for (let task of storage.tasksArray) {
+
+        if (task.taskStatus === "Todo") {
+
+            console.log(
+`--------------------------------------
+Task ID: ${task.taskID}
+Task Name: ${task.taskName}
+Task Description: ${task.taskDescription}
+Task Status: ${task.taskStatus}
+Date Created: ${task.dateCreated}
+--------------------------------------`
+            );
         }
     }
 }
 
 /**
- * Function to display tasks in progress
+ * List In Progress tasks
  */
 export function listTasksInProgress() {
-    if(tasksArray.length === 0) {
+
+    if (storage.tasksArray.length === 0) {
         console.log("No tasks to display. Add a task.");
         return;
     }
 
-    for(let i = 0; i < tasksArray.length; i++) {
-        if(tasksArray[i].taskStatus === "In Progress") {
-            console.log(`-------------------\nTask ID: ${tasksArray[i].taskID}, Task Name: ${tasksArray[i].taskName}\nTask Description: ${tasksArray[i].taskDescription}\nTask Status: ${tasksArray[i].taskStatus}\nDate Created: ${tasksArray[i].dateCreated} -------------------\n`);
+    for (let task of storage.tasksArray) {
+
+        if (task.taskStatus === "In Progress") {
+
+            console.log(
+`--------------------------------------
+Task ID: ${task.taskID}
+Task Name: ${task.taskName}
+Task Description: ${task.taskDescription}
+Task Status: ${task.taskStatus}
+Date Created: ${task.dateCreated}
+--------------------------------------`
+            );
         }
     }
 }
 
 /**
- * Function to display tasks that are done.
+ * List Done tasks
  */
 export function listTasksDone() {
-    if(tasksArray.length === 0) {
+
+    if (storage.tasksArray.length === 0) {
         console.log("No tasks to display. Add a task.");
         return;
     }
 
-    for(let i = 0; i < tasksArray.length; i++) {
-        if(tasksArray[i].taskStatus === "Done") {
-            console.log(`-------------------\nTask ID: ${tasksArray[i].taskID}, Task Name: ${tasksArray[i].taskName}\nTask Description: ${tasksArray[i].taskDescription}\nTask Status: ${tasksArray[i].taskStatus}\nDate Created: ${tasksArray[i].dateCreated} -------------------\n`);
+    for (let task of storage.tasksArray) {
+
+        if (task.taskStatus === "Done") {
+
+            console.log(
+`--------------------------------------
+Task ID: ${task.taskID}
+Task Name: ${task.taskName}
+Task Description: ${task.taskDescription}
+Task Status: ${task.taskStatus}
+Date Created: ${task.dateCreated}
+--------------------------------------`
+            );
         }
     }
 }
