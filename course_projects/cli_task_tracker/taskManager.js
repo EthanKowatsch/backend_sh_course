@@ -30,6 +30,10 @@ export function addTask(name, description) {
  * @param {string} updateValue
  */
 export function updateTask(searchID, updateType, updateValue) {
+    if(currentTaskID < 1) {
+        console.log("No tasks to update.");
+        return;
+    }
 
     for (let i = 0; i < storage.tasksArray.length; i++) {
 
@@ -67,6 +71,10 @@ export function updateTask(searchID, updateType, updateValue) {
  * Deletes a task by ID
  */
 export function deleteTask(idToDelete) {
+    if(currentTaskID < 1) {
+        console.log("No tasks to update.");
+        return;
+    }    
 
     const index = storage.tasksArray.findIndex(
         task => task.taskID === idToDelete
