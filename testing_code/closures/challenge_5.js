@@ -18,7 +18,7 @@ function greet(userName) {
 
 const limitedGreet = createLimitedUseFunction(greet, 3);
 
-limitedGreet("Ethan");
-limitedGreet("Alex");
-limitedGreet("Bob");
-limitedGreet("John");
+limitedGreet("Ethan"); // Hello Ethan
+limitedGreet("Alex"); // Hello Alex
+limitedGreet("Bob"); // Hello Bob
+limitedGreet("John"); // Reached limit on function use. Limit is 3
