@@ -1,0 +1,196 @@
+### 1. File Structure
+
+```
+mini-bank/
+├─ src/
+│   ├─ index.js               # Main entry point & console loop
+│   ├─ navigation.js          # Handles CLI menu & user input navigation
+│   ├─ models/
+│   │   ├─ Account.js         # Account class with createAccount static method
+│   │   ├─ Transaction.js     # Transaction class
+│   │   └─ errors.js          # Custom error classes
+│   ├─ utils/
+│   │   └─ jsonHandler.js     # Read/write JSON helper functions
+├─ data/
+│   ├─ accounts.json          # Stores all accounts
+│   └─ transactions.json      # Stores all transactions
+```
+
+### 2. Class & Inheritance Design
+
+**Account Class**
+
+```
+Properties:
+- accountNumber (auto-generated)
+- userName (string)
+- balance (number, default 0)
+- accountType (string: savings, investment, main, etc.)
+
+Methods:
+- deposit(amount)
+- withdraw(amount)
+- transfer(amount, targetAccountNumber)  # logs two transactions: transfer out/in
+- getAccountInfo() -> returns account summary
+
+Static Methods:
+- createAccount(userName, accountType, accountsArray) -> creates new Account and adds to accountsArray
+- generateAccountNumber()
+- findAccount(accountNumber, accountsArray)
+```
+
+**Transaction Class**
+
+```
+Properties:
+- type (deposit, withdraw, transfer out, transfer in)
+- amount
+- accountNumberAffected
+- timestamp
+
+Methods:
+- logTransaction() -> writes transaction to transactions.json
+```
+
+**Custom Error Classes (errors.js)**
+
+```
+- InvalidAmountError
+- InsufficientFundsError
+- AccountNotFoundError
+- InvalidTransactionTypeError
+```
+
+### 3. JSON Layout
+
+**accounts.json**
+
+```
+[
+  {
+    "accountNumber":"100001",
+    "userName":"Ethan Kowatsch",
+    "balance":500,
+    "accountType":"main"
+  },
+  {
+    "accountNumber":"100002",
+    "userName":"Jane Doe",
+    "balance":1000,
+    "accountType":"savings"
+  }
+]
+```
+
+**transactions.json**
+
+```
+[
+  {
+    "type":"deposit",
+    "amount":500,
+    "accountNumberAffected":"100001",
+    "timestamp":"2026-03-19T20:00:00"
+  },
+  {
+    "type":"transfer out",
+    "amount":200,
+    "accountNumberAffected":"100001",
+    "timestamp":"2026-03-19T20:10:00"
+  },
+  {
+    "type":"transfer in",
+    "amount":200,
+    "accountNumberAffected":"100002",
+    "timestamp":"2026-03-19T20:10:00"
+  }
+]
+```
+
+### 4. Console Flow (Navigation Example)
+
+**Main Menu Loop**
+
+```
+Welcome to Mini Bank!
+
+Please choose an option:
+1. Create Account
+2. Deposit
+3. Withdraw
+4. Transfer
+5. Exit
+
+Enter your choice: 1
+```
+
+**Create Account Example**
+
+```
+Enter your name: Ethan Kowatsch
+Enter account type (main, savings, investment): main
+Account created successfully!
+Account #100001
+Balance: $0
+```
+
+**Deposit Example**
+
+```
+Enter account number: 100001
+Enter amount to deposit: 500
+Deposit successful!
+New balance: $500
+Transaction logged.
+```
+
+**Withdraw Example**
+
+```
+Enter account number: 100001
+Enter amount to withdraw: 200
+Withdraw successful!
+New balance: $300
+Transaction logged.
+```
+
+**Transfer Example**
+
+```
+Enter your account number: 100001
+Enter target account number: 100002
+Enter amount to transfer: 100
+Transfer successful!
+Your new balance: $200
+Target account new balance: $1100
+Transaction logged.
+```
+
+**Error Handling Example**
+
+```
+Enter account number: 100001
+Enter amount to withdraw: 500
+Error: Insufficient funds. Current balance: $200
+```
+
+### 5. Utilities / Static Methods
+
+- `generateAccountNumber()` → auto increments account numbers for new accounts
+- `findAccount(accountNumber, accountsArray)` → static helper to locate account in JSON
+- `readJSON(filePath)` / `writeJSON(filePath, data)` → helpers for JSON storage
+
+### 6. Navigation File (CLI Loop)
+
+- Loops the menu until “Exit” is selected
+- Calls the relevant class methods for create/deposit/withdraw/transfer
+- Handles exceptions with try/catch and prints custom error messages
+
+### 7. Development Flow
+
+1. Build `Account.js`, `Transaction.js`, and `errors.js` first
+2. Implement JSON read/write helpers (`jsonHandler.js`)
+3. Build main menu loop in `navigation.js`
+4. Test each transaction type individually
+5. Add proper error handling
+6. Integrate `Transaction` logging for every operation
