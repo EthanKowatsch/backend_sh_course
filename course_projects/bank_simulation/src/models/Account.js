@@ -9,6 +9,7 @@ export let accountsArray = [];
  * - Account creation
  * - Balance updates
  * - Transfers between accounts
+ * - Viewing accounts
  */
 export class Account {
     constructor(userName, accountType) {

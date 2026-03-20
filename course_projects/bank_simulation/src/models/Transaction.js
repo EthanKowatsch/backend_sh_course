@@ -4,8 +4,11 @@ import { accountsArray } from "./Account.js";
 export let transactionArray = [];
 
 /**
- * Represents a bank transaction.
- * Responsible for creating transaction data.
+ * Transaction Model
+ * 
+ * Handles:
+ * - Transaction creation
+ * - Logging transactions to JSON
  */
 export class Transaction {
     /**
