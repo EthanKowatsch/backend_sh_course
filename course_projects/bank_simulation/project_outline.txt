@@ -36,7 +36,8 @@ Methods:
 Static Methods:
 - createAccount(userName, accountType, accountsArray) -> creates new Account and adds to accountsArray
 - generateAccountNumber()
-- findAccount(accountNumber, accountsArray)
+- printAccounts()
+- printSpecificAccount(accountNumber)
 ```
 
 **Transaction Class**
@@ -119,7 +120,9 @@ Please choose an option:
 2. Deposit
 3. Withdraw
 4. Transfer
-5. Exit
+5. Print accounts
+6. Print specific account information
+7. Exit
 
 Enter your choice: 1
 ```
