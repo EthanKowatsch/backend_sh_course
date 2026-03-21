@@ -1,2 +1,3 @@
-# Ignore anything saved to the data folder
-data/
+# Ignore bank data so account info isn't committed
+/data/accounts.json
+/data/transactions.json
