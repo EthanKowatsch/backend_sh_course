@@ -104,3 +104,37 @@ export class InvalidTransactionAmount extends Error {
         this.name = "InvalidTransactionAmount";
     }
 }
+
+/**
+ * Error class to handle JSON files not loading
+ */
+export class JSONLoadingError extends Error {
+    /**
+     * Creates a new JSONLoadingError instance.
+     * 
+     * @param {string} message - Stores custom error message
+     * @param {string} originalError - Stores original error message
+     */
+    constructor(message, originalError) {
+        super(message);
+        this.name = "JSONLoadingError";
+        this.originalError = originalError;
+    }
+}
+
+/**
+ * Error class to handle JSON files not updating
+ */
+export class JSONUpdatingError extends Error {
+    /**
+     * Creates a new JSONUpdatingError instance.
+     * 
+     * @param {string} message - Stores custom error message
+     * @param {string} originalError - Stores original error message
+     */
+    constructor(message, originalError) {
+        super(message);
+        this.name = "JSONUpdatingError";
+        this.originalError = originalError;
+    }
+}
