@@ -24,18 +24,31 @@ export function mainMenu() {
 
     rl.question("Enter Choice: ", (userChoice) => {
         switch(userChoice){
+            // Create a new account
             case "1":
+                rl.question("Enter Account Name: ", (accountName) => {
+                    rl.question("Enter Account Type: ", (accountType) => {
+                        Account.createAccount(accountName, accountType);
+                    });
+                });
                 break;
+            // Deposit amount
             case "2":
                 break;
+            // Withdraw amount
             case "3":
                 break;
+            // Transfer amount
             case "4":
                 break;
+            // Print all accounts and their details
             case "5":
                 break;
+            // Print specific account details
             case "6":
+
                 break;
+            // Exit application
             case "7":
                 break;
             default:

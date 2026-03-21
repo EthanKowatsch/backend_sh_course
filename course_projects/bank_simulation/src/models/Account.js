@@ -1,4 +1,5 @@
 import { generateAccountNumber, checkIfAccountExists } from "../utils/helper.js";
+import { updateAccounts } from "../utils/jsonHandler.js";
 
 export let accountsArray = [];
 
@@ -55,7 +56,8 @@ export class Account {
         // Update account balance        
         accountsArray[accountIndex].balance += amount;
 
-        // TODO: Log transaction to JSON
+        // Update account json
+        updateAccounts();
     }
 
     /**
@@ -81,7 +83,8 @@ export class Account {
         // Update account balance        
         accountsArray[accountIndex].balance -= amount;
 
-        // TODO: Log transaction to JSON
+        // Update account json
+        updateAccounts();
     }
 
     /**
@@ -114,11 +117,18 @@ export class Account {
      * @param {string} accountType - The account type (ie. savings, investment, etc.).
      */
     static createAccount(userName, accountType) {
+        if(!(userName.trim())) return // TODO: Custom no name error
+
+        if(!(accountType.trim())) return // TODO: Custom no account type entered error
+
         const newAccount = new Account(userName, accountType);
 
         accountsArray.push(newAccount);
 
-        // TODO: Update JSON account file
+        console.log(`Account #${newAccount.accountNumber} was created successfully.`);
+
+        // Update account json
+        updateAccounts();
     }
 
     /**
