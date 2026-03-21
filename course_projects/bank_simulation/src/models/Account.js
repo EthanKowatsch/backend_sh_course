@@ -1,5 +1,6 @@
 import { generateAccountNumber, checkIfAccountExists } from "../utils/helper.js";
-import { updateAccounts } from "../utils/jsonHandler.js";
+import { updateAccounts, updateTransactions } from "../utils/jsonHandler.js";
+import { InvalidUserNameEntered, InvalidAccountTypeEntered, InvalidAmountEntered, InvalidAccountEntered, InvalidWithdrawalAmount } from "./errors.js";
 
 export let accountsArray = [];
 
@@ -21,13 +22,17 @@ export class Account {
     }
 
     set userName(userNameValue) {
-        if(!userNameValue) return // TODO: Create custom error
+        if(!userNameValue.trim() || !userNameValue) {
+            throw new InvalidUserNameEntered();
+        }
 
         this._userName = userNameValue;
     }
 
     set accountType(accountTypeValue) {
-        if(!accountTypeValue) return // TODO: Create custom error
+        if(!accountTypeValue.trim() || !accountTypeValue) {
+            throw new InvalidAccountTypeEntered();
+        }
 
         this._accountType = accountTypeValue;
     }
@@ -42,12 +47,16 @@ export class Account {
      * @param {number} amount - Amount to be deposited.
      */
     deposit(accountNumberInput, amount) {
-        if(amount <= 0) return //TODO: Add custom error;
+        if(amount <= 0) {
+            throw new InvalidAmountEntered();
+        }
 
         // Make sure account number inputted exists
         const accountExists = checkIfAccountExists(accountNumberInput);
 
-        if(!accountExists) return //TODO: Add custom error;
+        if(!accountExists) {
+            throw new InvalidAccountEntered();
+        }
 
         const accountIndex = accountsArray.findIndex(
             account => account.accountNumber === accountNumberInput
@@ -58,6 +67,9 @@ export class Account {
 
         // Update account json
         updateAccounts();
+
+        // Update transaction json
+        updateTransactions();
     }
 
     /**
@@ -67,24 +79,33 @@ export class Account {
      * @param {number} amount - Amount to be withdrawn.
      */
     withdraw(accountNumberInput, amount) {
-        if(amount <= 0) return //TODO: Add custom error;
+        if(amount <= 0) {
+            throw new InvalidAmountEntered();    
+        }
 
         // Make sure account number inputted exists
         const accountExists = checkIfAccountExists(accountNumberInput);
 
-        if(!accountExists) return //TODO: Add custom error;
+        if(!accountExists) {
+            throw new InvalidAccountEntered();
+        }
 
         const accountIndex = accountsArray.findIndex(
             account => account.accountNumber === accountNumberInput
         );
 
-        if((accountsArray[accountIndex].balance - amount) < 0) return //TODO: Add custom error;
+        if((accountsArray[accountIndex].balance - amount) < 0) {
+            throw new InvalidWithdrawalAmount();
+        }
 
         // Update account balance        
         accountsArray[accountIndex].balance -= amount;
 
         // Update account json
         updateAccounts();
+
+        // Update transaction json
+        updateTransactions();
     }
 
     /**
@@ -95,19 +116,30 @@ export class Account {
      * @param {number} amount - Amount being transferred between accounts.
      */
     transfer(accountNumberTransferOut, accountNumberTransferIn, amount) {
-        if(amount <= 0) return //TODO: Add custom error;
+        if(amount <= 0) {
+            throw new InvalidAmountEntered();    
+        }
 
         // Make sure accounts inputted exist
         const accountTransferOutExists = checkIfAccountExists(accountNumberTransferOut);
         const accountTransferInExists = checkIfAccountExists(accountNumberTransferIn);
 
-        if(!accountTransferOutExists) return //TODO: Add custom error;
-        if(!accountTransferInExists) return //TODO: Add custom error;
+        if(!accountTransferOutExists) {
+            throw new InvalidAccountEntered();
+        }
+
+        if(!accountTransferInExists) {
+            throw new InvalidAccountEntered();
+        }
 
         Account.withdraw(accountNumberTransferOut, amount);
         Account.deposit(accountNumberTransferIn, amount);
 
-        // TODO: Post both outgoing and inbound transactions
+        // Update accounts json
+        updateAccounts();
+
+        // Update transaction json
+        updateTransactions();
     }
 
     /**
@@ -117,10 +149,6 @@ export class Account {
      * @param {string} accountType - The account type (ie. savings, investment, etc.).
      */
     static createAccount(userName, accountType) {
-        if(!(userName.trim())) return // TODO: Custom no name error
-
-        if(!(accountType.trim())) return // TODO: Custom no account type entered error
-
         const newAccount = new Account(userName, accountType);
 
         accountsArray.push(newAccount);
@@ -149,7 +177,9 @@ export class Account {
         // Make sure account number inputted exists
         const accountExists = checkIfAccountExists(accountNumberToPrint);
 
-        if(!accountExists) return //TODO: Add custom error;
+        if(!accountExists) {
+            throw new InvalidAccountEntered();
+        }
 
         const accountIndex = accountsArray.findIndex(
             account => account.accountNumber === accountNumberToPrint
