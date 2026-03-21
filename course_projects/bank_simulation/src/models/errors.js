@@ -74,3 +74,33 @@ export class InvalidWithdrawalAmount extends Error {
         this.name = "InvalidWithdrawalAmount";
     }
 }
+
+/**
+ * Error class to handle invalid transaction type entered
+ */
+export class InvalidTransactionType extends Error {
+    /**
+     * Creates a new InvalidTransactionType instance
+     * 
+     * @param {string} message - Value to hold the error message.
+     */
+    constructor(message = "Transaction type must have a value.") {
+        super(message);
+        this.name = "InvalidTransactionType";
+    }
+}
+
+/**
+ * Error class to handle invalid transaction type entered
+ */
+export class InvalidTransactionAmount extends Error {
+    /**
+     * Creates a new InvalidTransactionAmount instance
+     * 
+     * @param {string} message - Value to hold the error message.
+     */
+    constructor(message = "Transaction amount must be greater than $0.") {
+        super(message);
+        this.name = "InvalidTransactionAmount";
+    }
+}

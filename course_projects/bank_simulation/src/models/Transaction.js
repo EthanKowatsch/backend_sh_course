@@ -1,5 +1,5 @@
 import { getCurrentDateAndTime, checkIfAccountExists } from "../utils/helper.js";
-import { accountsArray } from "./Account.js";
+import { InvalidTransactionAmount, InvalidTransactionType, InvalidAccountEntered } from "./errors.js";
 
 export let transactionArray = [];
 
@@ -26,16 +26,17 @@ export class Transaction {
     }
 
     set transactionType(transactionTypeValue) {
-        if(!transactionTypeValue) return //TODO: Add custom error;
+        if(!transactionTypeValue || !transactionTypeValue.trim()) {
+            throw new InvalidTransactionType(); 
+        }
 
         this._transactionType = transactionTypeValue;
     }
 
-    /**
-     * 
-     */
     set transactionAmount(transactionAmountValue) {
-        if(transactionAmountValue <= 0) return //TODO: Add custom error;
+        if(transactionAmountValue <= 0) {
+            throw new InvalidTransactionAmount();
+        }
 
         this._transactionAmount = transactionAmountValue;
     }
@@ -43,7 +44,9 @@ export class Transaction {
     set accountNumberAffected(accountNumberAffectedValue) {
         const accountExists = checkIfAccountExists(accountNumberAffectedValue);
 
-        if(!accountExists) return //TODO: Add custom error;
+        if(!accountExists) {
+            throw new InvalidAccountEntered();
+        }
 
         this._accountNumberAffected = accountNumberAffectedValue;
     }
@@ -53,9 +56,15 @@ export class Transaction {
     get accountNumberAffected() { return this._accountNumberAffected };
 
     /**
-     * Logs transaction to transactions.json
+     * Static method to create a new Transaction class.
+     * 
+     * @param {string} transactionType 
+     * @param {number} transactionAmount 
+     * @param {number} accountNumberAffected 
      */
-    logTransaction() {
+    static createNewTransaction(transactionType, transactionAmount, accountNumberAffected) {
+        const newTransaction = new Transaction(transactionType, transactionAmount, accountNumberAffected);
 
+        transactionArray.push(newTransaction);
     }
 }

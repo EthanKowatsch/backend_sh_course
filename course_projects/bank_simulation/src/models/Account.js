@@ -1,6 +1,7 @@
 import { generateAccountNumber, checkIfAccountExists } from "../utils/helper.js";
 import { updateAccounts, updateTransactions } from "../utils/jsonHandler.js";
 import { InvalidUserNameEntered, InvalidAccountTypeEntered, InvalidAmountEntered, InvalidAccountEntered, InvalidWithdrawalAmount } from "./errors.js";
+import { Transaction } from "./Transaction.js";
 
 export let accountsArray = [];
 
@@ -74,6 +75,8 @@ export class Account {
         // Update account json
         updateAccounts();
 
+        Transaction.createNewTransaction("Deposit", amount, accountNumberInput);
+
         // Update transaction json
         updateTransactions();
     }
@@ -110,6 +113,8 @@ export class Account {
         // Update account json
         updateAccounts();
 
+        Transaction.createNewTransaction("Withdrawal", amount, accountNumberInput);
+
         // Update transaction json
         updateTransactions();
     }
@@ -143,6 +148,9 @@ export class Account {
 
         // Update accounts json
         updateAccounts();
+
+        Transaction.createNewTransaction("Transfer Out", amount, accountNumberTransferOut);
+        Transaction.createNewTransaction("Transfer In", amount, accountNumberTransferIn);
 
         // Update transaction json
         updateTransactions();
