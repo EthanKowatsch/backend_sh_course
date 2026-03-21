@@ -61,7 +61,7 @@ export class Transaction {
      * @param {number} accountNumberAffected 
      */
     static createNewTransaction(transactionType, transactionAmount, accountNumberAffected) {
-        const newTransaction = new Transaction(transactionType, transactionAmount, accountNumberAffected);
+        const newTransaction = new Transaction(transactionType, transactionAmount.toFixed(2), accountNumberAffected);
 
         transactionArray.push(newTransaction);
     }
