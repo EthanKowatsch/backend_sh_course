@@ -38,7 +38,7 @@ export function mainMenu() {
             case "2":
                 rl.question("Deposit - Enter Account Number: ", (accountNumber) => {
                     rl.question("Enter Deposit Amount: ", (amount) => {
-                        Account.deposit(accountNumber, amount);
+                        Account.deposit(Number(accountNumber), Number(amount));
                         mainMenu();
                     });
                 });
@@ -47,7 +47,7 @@ export function mainMenu() {
             case "3":
                 rl.question("Withdraw - Enter Account Number: ", (accountNumber) => {
                     rl.question("Enter Withdraw Amount: ", (amount) => {
-                        Account.withdraw(accountNumber, amount);
+                        Account.withdraw(Number(accountNumber), Number(amount));
                         mainMenu();
                     });
                 });
@@ -57,7 +57,7 @@ export function mainMenu() {
                 rl.question("Enter Account Transferring Out: ", (accountNumberOut) => {
                     rl.question("Enter Account Transferring In: ", (accountNumberIn) => {
                         rl.question("Enter Transfer Amount: ", (amount) => {
-                            Account.transfer(accountNumberOut, accountNumberIn, amount);
+                            Account.transfer(Number(accountNumberOut), Number(accountNumberIn), Number(amount));
                             mainMenu();
                         });
                     });
@@ -72,7 +72,7 @@ export function mainMenu() {
             // Print specific account details
             case "6":
                 rl.question("Print Account - Enter Account Number: ", (accountNumberToPrint) => {
-                    Account.printSpecificAccount(accountNumberToPrint);
+                    Account.printSpecificAccount(Number(accountNumberToPrint));
                     mainMenu();
                 });
                 break;

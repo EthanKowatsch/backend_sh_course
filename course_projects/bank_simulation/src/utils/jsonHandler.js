@@ -1,6 +1,6 @@
 import fs from "fs";
-import { accountsArray } from "../models/Account.js";
-import { transactionArray } from "../models/Transaction.js";
+import { Account, accountsArray } from "../models/Account.js";
+import { Transaction, transactionArray } from "../models/Transaction.js";
 import { JSONLoadingError, JSONUpdatingError } from "../models/errors.js";
 
 /**
@@ -14,18 +14,19 @@ export function loadAccounts() {
         }
 
         const jsonAccounts = fs.readFileSync("data/accounts.json", "utf8");
-
-        if (!jsonAccounts || !jsonAccounts.trim()) {
+        if (!jsonAccounts?.trim()) {
             accountsArray.length = 0;
             return;
         }
 
         const tempAccountsObj = JSON.parse(jsonAccounts);
-
         accountsArray.length = 0;
-        accountsArray.push(...tempAccountsObj.map(a => new Account(a.userName, a.accountType, a.balance, a.accountNumber)));
-    }
-    catch(err) {
+        accountsArray.push(
+            ...tempAccountsObj.map(a =>
+                new Account(a.userName ?? a._userName, a.accountType ?? a._accountType, a.balance, a.accountNumber)
+            )
+        );
+    } catch (err) {
         throw new JSONLoadingError("Failed to load accounts JSON.", err);
     }
 }
@@ -53,18 +54,24 @@ export function loadTransactions() {
         }
 
         const jsonTransactions = fs.readFileSync("data/transactions.json", "utf8");
-
-        if (!jsonTransactions || !jsonTransactions.trim()) {
+        if (!jsonTransactions?.trim()) {
             transactionArray.length = 0;
             return;
         }
 
         const tempTransactionObj = JSON.parse(jsonTransactions);
-
         transactionArray.length = 0;
-        transactionArray.push(...tempTransactionObj);
-    }
-    catch(err) {
+        transactionArray.push(
+            ...tempTransactionObj.map(t =>
+                new Transaction(
+                    t.transactionType ?? t._transactionType,
+                    t.transactionAmount ?? t._transactionAmount,
+                    t.accountNumberAffected ?? t._accountNumberAffected,
+                    t.timeStamp
+                )
+            )
+        );
+    } catch (err) {
         throw new JSONLoadingError("Failed to load transactions JSON.", err);
     }
 }

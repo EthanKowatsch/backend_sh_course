@@ -18,42 +18,40 @@ export class Transaction {
      * @param {number} transactionAmount - Amount involved in transaction.
      * @param {number} accountNumberAffected - Account linked to transaction.
      */
-    constructor(transactionType, transactionAmount, accountNumberAffected) {
+    constructor(transactionType, transactionAmount, accountNumberAffected, timeStamp = getCurrentDateAndTime()) {
         this.transactionType = transactionType;
         this.transactionAmount = transactionAmount;
         this.accountNumberAffected = accountNumberAffected;
-        this.timeStamp = getCurrentDateAndTime();
+        this.timeStamp = timeStamp;
     }
 
-    set transactionType(transactionTypeValue) {
-        if(!transactionTypeValue || !transactionTypeValue.trim()) {
-            throw new InvalidTransactionType(); 
-        }
-
-        this._transactionType = transactionTypeValue;
+    set transactionType(value) {
+        if (!value?.trim()) throw new InvalidTransactionType();
+        this._transactionType = value;
     }
 
-    set transactionAmount(transactionAmountValue) {
-        if(transactionAmountValue <= 0) {
-            throw new InvalidTransactionAmount();
-        }
-
-        this._transactionAmount = transactionAmountValue;
+    set transactionAmount(value) {
+        if (value <= 0) throw new InvalidTransactionAmount();
+        this._transactionAmount = value;
     }
 
-    set accountNumberAffected(accountNumberAffectedValue) {
-        const accountExists = checkIfAccountExists(accountNumberAffectedValue);
-
-        if(!accountExists) {
-            throw new InvalidAccountEntered();
-        }
-
-        this._accountNumberAffected = accountNumberAffectedValue;
+    set accountNumberAffected(value) {
+        if (!checkIfAccountExists(value)) throw new InvalidAccountEntered();
+        this._accountNumberAffected = value;
     }
 
-    get transactionType() { return this._transactionType };
-    get transactionAmount() { return this._transactionAmount };
-    get accountNumberAffected() { return this._accountNumberAffected };
+    get transactionType() { return this._transactionType; }
+    get transactionAmount() { return this._transactionAmount; }
+    get accountNumberAffected() { return this._accountNumberAffected; }
+
+    toJSON() {
+        return {
+            transactionType: this.transactionType,
+            transactionAmount: this.transactionAmount,
+            accountNumberAffected: this.accountNumberAffected,
+            timeStamp: this.timeStamp
+        };
+    }
 
     /**
      * Static method to create a new Transaction class.
