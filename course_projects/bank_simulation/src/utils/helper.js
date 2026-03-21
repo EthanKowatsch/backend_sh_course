@@ -50,3 +50,17 @@ export function generateAccountNumber() {
 
     return generatedAccountNumber;
 }
+
+/**
+ * Helper function to find the account number index in the accounts array.
+ * 
+ * @param {number} accountNumberInputted 
+ * @returns the index of the specific account number in the accounts array.
+ */
+export function findAccountIndex(accountNumberInputted) {
+    const accountIndex = accountsArray.findIndex(
+            account => account.accountNumber === accountNumberInputted
+    );
+
+    return accountIndex;
+}
