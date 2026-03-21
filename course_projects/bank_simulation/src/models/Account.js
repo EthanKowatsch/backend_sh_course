@@ -1,4 +1,4 @@
-import { generateAccountNumber, checkIfAccountExists } from "../utils/helper.js";
+import { generateAccountNumber, checkIfAccountExists, findAccountIndex } from "../utils/helper.js";
 import { updateAccounts, updateTransactions } from "../utils/jsonHandler.js";
 import { InvalidUserNameEntered, InvalidAccountTypeEntered, InvalidAmountEntered, InvalidAccountEntered, InvalidWithdrawalAmount } from "./errors.js";
 import { Transaction } from "./Transaction.js";
@@ -65,9 +65,7 @@ export class Account {
             throw new InvalidAccountEntered();
         }
 
-        const accountIndex = accountsArray.findIndex(
-            account => account.accountNumber === accountNumberInput
-        );
+        const accountIndex = findAccountIndex(accountNumberInput)
 
         // Update account balance        
         accountsArray[accountIndex].balance += amount;
@@ -99,9 +97,7 @@ export class Account {
             throw new InvalidAccountEntered();
         }
 
-        const accountIndex = accountsArray.findIndex(
-            account => account.accountNumber === accountNumberInput
-        );
+        const accountIndex = findAccountIndex(accountNumberInput);
 
         if((accountsArray[accountIndex].balance - amount) < 0) {
             throw new InvalidWithdrawalAmount();
@@ -195,9 +191,7 @@ export class Account {
             throw new InvalidAccountEntered();
         }
 
-        const accountIndex = accountsArray.findIndex(
-            account => account.accountNumber === accountNumberToPrint
-        );
+        const accountIndex = findAccountIndex(accountNumberToPrint);
 
         console.log(`Account: #${accountsArray[accountIndex].accountNumber} | Account name: ${accountsArray[accountIndex].userName} | Account Type: ${accountsArray[accountIndex].accountType} | Balance: ${accountsArray[accountIndex].balance.toFixed(2)}`);
     }

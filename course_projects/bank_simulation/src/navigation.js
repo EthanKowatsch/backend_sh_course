@@ -1,3 +1,4 @@
+import { Account } from "./models/Account.js";
 import readline from "node:readline";
 
 const rl = readline.createInterface({
@@ -29,30 +30,60 @@ export function mainMenu() {
                 rl.question("Enter Account Name: ", (accountName) => {
                     rl.question("Enter Account Type: ", (accountType) => {
                         Account.createAccount(accountName, accountType);
+                        mainMenu();
                     });
                 });
                 break;
             // Deposit amount
             case "2":
+                rl.question("Deposit - Enter Account Number: ", (accountNumber) => {
+                    rl.question("Enter Deposit Amount: ", (amount) => {
+                        Account.deposit(accountNumber, amount);
+                        mainMenu();
+                    });
+                });
                 break;
             // Withdraw amount
             case "3":
+                rl.question("Withdraw - Enter Account Number: ", (accountNumber) => {
+                    rl.question("Enter Withdraw Amount: ", (amount) => {
+                        Account.withdraw(accountNumber, amount);
+                        mainMenu();
+                    });
+                });
                 break;
             // Transfer amount
             case "4":
+                rl.question("Enter Account Transferring Out: ", (accountNumberOut) => {
+                    rl.question("Enter Account Transferring In: ", (accountNumberIn) => {
+                        rl.question("Enter Transfer Amount: ", (amount) => {
+                            Account.transfer(accountNumberOut, accountNumberIn, amount);
+                            mainMenu();
+                        });
+                    });
+                });
                 break;
             // Print all accounts and their details
             case "5":
+                Account.printAccounts();
+
+                mainMenu();
                 break;
             // Print specific account details
             case "6":
-
+                rl.question("Print Account - Enter Account Number: ", (accountNumberToPrint) => {
+                    Account.printSpecificAccount(accountNumberToPrint);
+                    mainMenu();
+                });
                 break;
             // Exit application
             case "7":
+                console.log("Exiting Bank Software...");
+                rl.close();
                 break;
             default:
                 console.log("ERROR");
+                mainMenu();
                 break;
         }
     })
