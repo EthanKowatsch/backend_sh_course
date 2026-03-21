@@ -59,11 +59,6 @@ export class Account {
      * @param {number} amount - Amount to be deposited.
      */
     static deposit(accountNumberInput, amount) {
-        if(accountsArray.length === 0) {
-            console.log("Error: No accounts currently exist");
-            return;
-        }
-
         if(amount <= 0) {
             throw new InvalidAmountEntered();
         }
@@ -98,11 +93,6 @@ export class Account {
      * @param {number} amount - Amount to be withdrawn.
      */
     static withdraw(accountNumberInput, amount) {
-        if(accountsArray.length === 0) {
-            console.log("Error: No accounts currently exist");
-            return;
-        }
-
         if(amount <= 0) {
             throw new InvalidAmountEntered();    
         }
@@ -142,11 +132,6 @@ export class Account {
      * @param {number} amount - Amount being transferred between accounts.
      */
     static transfer(accountNumberTransferOut, accountNumberTransferIn, amount) {
-        if(accountsArray.length <= 1) {
-            console.log("No other accounts to transfer to.");
-            return;
-        }
-        
         if(amount <= 0) {
             throw new InvalidAmountEntered();    
         }
@@ -199,11 +184,6 @@ export class Account {
      * Static method to print all accounts
      */
     static printAccounts() {
-        if(accountsArray.length === 0) {
-            console.log("Error: No accounts currently exist");
-            return;
-        }
-
         console.log("--- Account(s) ---");
         accountsArray.forEach(account => {
             console.log(`Account: #${account.accountNumber} | Account name: ${account.userName} | Account Type: ${account.accountType} | Balance: $${account.balance.toFixed(2)}`);

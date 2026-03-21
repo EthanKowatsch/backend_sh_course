@@ -1,4 +1,4 @@
-import { Account } from "./models/Account.js";
+import { Account, accountsArray } from "./models/Account.js";
 import readline from "node:readline";
 
 const rl = readline.createInterface({
@@ -11,6 +11,17 @@ const rl = readline.createInterface({
  */
 function printMenu() {
     console.log("\n--- Bank Simulation Software ---");
+    
+    if (accountsArray.length === 0) {
+        console.log("No active accounts yet.");
+    } else {
+        console.log("\nAccounts active:");
+        accountsArray.forEach(account => {
+            console.log(`Account #${account.accountNumber} | Balance: $${account.balance.toFixed(2)} | Account Type: ${account.accountType}`);
+        });
+    }
+
+    console.log("\nMenu Options:");
     console.log("1 - Create Account");
     console.log("2 - Deposit");
     console.log("3 - Withdraw");
@@ -36,6 +47,10 @@ export function mainMenu() {
                 break;
             // Deposit amount
             case "2":
+                if(accountsArray.length === 0) {
+                    console.log("Error: No accounts currently exist");
+                    return;
+                }
                 rl.question("Deposit - Enter Account Number: ", (accountNumber) => {
                     rl.question("Enter Deposit Amount: ", (amount) => {
                         Account.deposit(Number(accountNumber), Number(amount));
@@ -45,6 +60,10 @@ export function mainMenu() {
                 break;
             // Withdraw amount
             case "3":
+                if(accountsArray.length === 0) {
+                    console.log("Error: No accounts currently exist");
+                    return;
+                }
                 rl.question("Withdraw - Enter Account Number: ", (accountNumber) => {
                     rl.question("Enter Withdraw Amount: ", (amount) => {
                         Account.withdraw(Number(accountNumber), Number(amount));
@@ -54,6 +73,10 @@ export function mainMenu() {
                 break;
             // Transfer amount
             case "4":
+                if(accountsArray.length === 0) {
+                    console.log("Error: No accounts currently exist");
+                    return;
+                }
                 rl.question("Enter Account Transferring Out: ", (accountNumberOut) => {
                     rl.question("Enter Account Transferring In: ", (accountNumberIn) => {
                         rl.question("Enter Transfer Amount: ", (amount) => {
@@ -65,12 +88,22 @@ export function mainMenu() {
                 break;
             // Print all accounts and their details
             case "5":
+                if(accountsArray.length === 0) {
+                    console.log("Error: No accounts currently exist");
+                    return;
+                }
+
                 Account.printAccounts();
 
                 mainMenu();
                 break;
             // Print specific account details
             case "6":
+                if(accountsArray.length === 0) {
+                    console.log("Error: No accounts currently exist");
+                    return;
+                }
+
                 rl.question("Print Account - Enter Account Number: ", (accountNumberToPrint) => {
                     Account.printSpecificAccount(Number(accountNumberToPrint));
                     mainMenu();
@@ -82,7 +115,7 @@ export function mainMenu() {
                 rl.close();
                 break;
             default:
-                console.log("ERROR");
+                console.log("Error: Input is incorrect.");
                 mainMenu();
                 break;
         }
