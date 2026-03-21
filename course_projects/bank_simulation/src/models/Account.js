@@ -14,6 +14,12 @@ export let accountsArray = [];
  * - Viewing accounts
  */
 export class Account {
+    /**
+     * Creates a new account instance.
+     * 
+     * @param {string} userName - Username associated with the account.
+     * @param {string} accountType - The type of account (Investment, Banking, etc.).
+     */
     constructor(userName, accountType) {
         this.accountNumber = generateAccountNumber();
         this.userName = userName;

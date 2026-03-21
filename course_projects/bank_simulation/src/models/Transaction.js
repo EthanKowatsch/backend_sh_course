@@ -12,9 +12,11 @@ export let transactionArray = [];
  */
 export class Transaction {
     /**
-     * @param {string} transactionType - Type of transaction (deposit, withdrawal, transfer)
-     * @param {number} transactionAmount - Amount involved in transaction
-     * @param {number} accountNumberAffected - Account linked to transaction
+     * Creates a new Transaction instance.
+     * 
+     * @param {string} transactionType - Type of transaction (deposit, withdrawal, transfer).
+     * @param {number} transactionAmount - Amount involved in transaction.
+     * @param {number} accountNumberAffected - Account linked to transaction.
      */
     constructor(transactionType, transactionAmount, accountNumberAffected) {
         this.transactionType = transactionType;
