@@ -13,14 +13,14 @@ export function checkIfAccountExists(accountNumberInputted) {
     );
 }
 
-const currentDate = new Date();
-
 /**
  * Helper function to generate the current date and time
  *  
  * @returns Formatted date and time as a string.
  */
 export function getCurrentDateAndTime() {
+    const currentDate = new Date();
+
     const month = currentDate.getMonth() + 1;
     const day = currentDate.getDate();
     const year = currentDate.getFullYear();

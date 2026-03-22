@@ -1,4 +1,4 @@
-import { generateAccountNumber, checkIfAccountExists, findAccountIndex } from "../utils/helper.js";
+import { generateAccountNumber, checkIfAccountExists, findAccountIndex, getCurrentDateAndTime } from "../utils/helper.js";
 import { updateAccounts, updateTransactions } from "../utils/jsonHandler.js";
 import { InvalidUserNameEntered, InvalidAccountTypeEntered, InvalidAmountEntered, InvalidAccountEntered, InvalidWithdrawalAmount } from "./errors.js";
 import { Transaction } from "./Transaction.js";
