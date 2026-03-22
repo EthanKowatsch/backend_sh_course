@@ -1,4 +1,4 @@
-import { generateAccountNumber, checkIfAccountExists, findAccountIndex } from "../utils/helper.js";
+import { generateAccountNumber, checkIfAccountExists, findAccountIndex, getCurrentDateAndTime } from "../utils/helper.js";
 import { updateAccounts, updateTransactions } from "../utils/jsonHandler.js";
 import { InvalidUserNameEntered, InvalidAccountTypeEntered, InvalidAmountEntered, InvalidAccountEntered, InvalidWithdrawalAmount } from "./errors.js";
 import { Transaction } from "./Transaction.js";
@@ -70,7 +70,7 @@ export class Account {
             throw new InvalidAccountEntered();
         }
 
-        const accountIndex = findAccountIndex(accountNumberInput)
+        const accountIndex = findAccountIndex(accountNumberInput);
 
         // Update account balance        
         accountsArray[accountIndex].balance += amount;
@@ -140,16 +140,15 @@ export class Account {
         const accountTransferOutExists = checkIfAccountExists(accountNumberTransferOut);
         const accountTransferInExists = checkIfAccountExists(accountNumberTransferIn);
 
-        if(!accountTransferOutExists) {
+        if(!accountTransferOutExists || !accountTransferInExists) {
             throw new InvalidAccountEntered();
         }
 
-        if(!accountTransferInExists) {
-            throw new InvalidAccountEntered();
-        }
+        const accountTransferOutIndex = findAccountIndex(accountNumberTransferOut);
+        const accountTransferInIndex = findAccountIndex(accountNumberTransferIn);
 
-        Account.withdraw(accountNumberTransferOut, amount);
-        Account.deposit(accountNumberTransferIn, amount);
+        accountsArray[accountTransferOutIndex].balance -= amount;
+        accountsArray[accountTransferInIndex].balance += amount;
 
         // Update accounts json
         updateAccounts();
