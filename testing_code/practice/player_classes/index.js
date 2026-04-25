@@ -1,4 +1,12 @@
-class Player {
+import { getRandomNumber, printPlayers } from "./helper.js";
+
+// Array to store players season totals
+let playersArray = [];
+
+/**
+ * Player class
+ */
+export class Player {
     constructor(name, goals = 0, assists = 0) {
         this.name = name;
         this.goals = goals;
@@ -14,19 +22,26 @@ class Player {
     }
 
     getSummary() {
-        console.log(`Player Name: ${this.name} | Goals: ${this.goals} | Assists: ${this.assists} | Total Points: ${this.goals + this.assists}`);
+        return `Player Name: ${this.name} | Goals: ${this.goals} | Assists: ${this.assists} | Total Points: ${this.goals + this.assists}`;
     }
 }
 
-// Create player instances
-let player1 = new Player("Ethan");
-let player2 = new Player("John");
+playersArray.push(new Player("Ethan"));
+playersArray.push(new Player("John"));
 
-player1.addGoal();
-player2.addAssist();
-player1.addGoal();
-player2.addGoal();
-player1.addAssist();
+// Generate random end of season totals for 10 games
+for(let i = 0; i < 10; i++) {
+    let randomPlayerIndex = getRandomNumber(0, playersArray.length - 1);
 
-player1.getSummary();
-player2.getSummary();
+    let randomAction = getRandomNumber(0, 1);
+
+    // 0 is goal, 1 is assist
+    if(randomAction === 0) {
+        playersArray[randomPlayerIndex].addGoal();
+    }
+    else {
+        playersArray[randomPlayerIndex].addAssist();
+    }
+}
+
+printPlayers(playersArray);
