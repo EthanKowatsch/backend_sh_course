@@ -15,6 +15,6 @@ export class Habit {
     }
 
     getSummary() {
-        console.log(`Habit Name: ${this.habitName} | Habit Streak: ${this.habitStreak}`);
+        console.log(`\nHabit Name: ${this.habitName} | Habit Streak: ${this.habitStreak}`);
     }
 }

@@ -21,13 +21,18 @@ function deleteHabit(indexToDelete) {
     return habitArray.filter((_, index) => index !== indexToDelete);
 }
 
+function findHabitIndex(habitNameIndex) {
+    return habitArray.findIndex(habit => habit.habitName === habitNameIndex);
+}
+
 function printMenu() {
     console.log("\n--- Habit Tracking Tool ---");
     console.log("1 - Add New Habit");
-    console.log("2 - View All Habits");
-    console.log("3 - View Specific Habit");
-    console.log("4 - Delete Habit");
-    console.log("5 - Exit");
+    console.log("2 - Modify Streak of Specific Habit");
+    console.log("3 - View All Habits");
+    console.log("4 - View Specific Habit");
+    console.log("5 - Delete Habit");
+    console.log("6 - Exit");
 }
 
 export function mainMenu() {
@@ -52,11 +57,55 @@ export function mainMenu() {
 
                 break;
             case "2":
+                rl.question("Name of Streak to Modify: ", (modifyHabitName) => {
+                    if (!modifyHabitName.trim()) {
+                        console.log("Habit name must not be empty.");
+                        mainMenu();
+                        return;
+                    }
+
+                    const habitIndex = findHabitIndex(modifyHabitName);
+
+                    if (habitIndex === -1) {
+                        console.log("Habit does not exist.");
+                        mainMenu();
+                        return;
+                    }
+
+                    rl.question("Modify Streak (+ to increment, - to reset): ", (streakModifier) => {
+                        if (!streakModifier.trim()) {
+                            console.log("Streak modifier must not be empty.");
+                            mainMenu();
+                            return;
+                        }
+                        
+                        switch(streakModifier) {
+                            case "+":
+                                habitArray[habitIndex].incrementStreak();
+                                console.log("Streak incremented.");
+
+                                mainMenu();
+                                break;
+                            case "-":
+                                habitArray[habitIndex].resetStreak();
+                                console.log("Streak reset.");
+
+                                mainMenu();
+                                break;
+                            default:
+                                console.log("Error inputting streak modifier")
+                                break;
+                        }
+                    });
+                });
+                
+                break;
+            case "3":
                 printAllHabits();
 
                 mainMenu();
                 break;
-            case "3":
+            case "4":
                 rl.question("Enter Habit to View: ", (habitNameToView) => {
                     if (!habitNameToView.trim()) {
                         console.log("Habit name must not be empty.");
@@ -64,7 +113,7 @@ export function mainMenu() {
                         return;
                     }
 
-                    const habitIndex = habitArray.findIndex(habitNameToView);
+                    const habitIndex = findHabitIndex(habitNameToView);
 
                     if(habitIndex === -1) {
                         console.log("Habit does not exist.");
@@ -77,7 +126,7 @@ export function mainMenu() {
                 });
 
                 break;
-            case "4":
+            case "5":
                 rl.question("Enter Habit Name to Delete: ", (habitNameToDelete) => {
                     if (!habitNameToDelete.trim()) {
                         console.log("Habit name must not be empty.");
@@ -85,24 +134,22 @@ export function mainMenu() {
                         return;
                     }
 
-                    const index = habitArray.findIndex(
-                        habit => habit.habitName === habitNameToDelete
-                    );
+                    const habitIndex = findHabitIndex(habitNameToDelete);
 
-                    if (index === -1) {
+                    if (habitIndex === -1) {
                         console.log("Habit does not exist.");
                         mainMenu();
                         return;
                     }
 
-                    habitArray.splice(index, 1);
+                    habitArray.splice(habitIndex, 1);
 
                     console.log("Habit Deleted Successfully.");
                     mainMenu();
                 });
 
                 break;
-            case "5":
+            case "6":
                 console.log("Exiting habit tracker.");
                 rl.close();
                 break;
