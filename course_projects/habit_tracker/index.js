@@ -1,3 +1,3 @@
-import { mainMenu } from "./helper.js";
+import { mainMenu } from "./menu.js";
 
 mainMenu();
